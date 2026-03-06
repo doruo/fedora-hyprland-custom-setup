@@ -32,7 +32,6 @@ alias a="alias" # Shortcut to use for every aliases
 a c="clear"
 a e="echo"
 a h="history"
-a g="grep"
 a f="find"
 a k="kill"
 a ka="k all"
@@ -54,10 +53,13 @@ a una="unalias"
 PACKAGE_MANAGER="dnf"
 
 # Package & versions managment
-a u="s $PACKAGE_MANAGER update"
-a i="s $PACKAGE_MANGER install"
-a r="s $PACKAGE_MANGER rm"
-a si="s snap install" # install via Snap (not recommended)
+a pm="s $PACKAGE_MANAGER"
+a u="c; pm up; ar; pmclean"
+a i="pm in"
+a r="pm rm"
+a upgrade="pm upgrade"
+a autoremove="pm autoremove"
+a pmclean="pm clean all"
 
 # File & Directory
 a home="cd $HOME"
@@ -71,6 +73,17 @@ a cdp4="cdp3;cdp"
 a isoftwares="i git; i pgadmin4; i snap; si postman"
 a ilanguages="i go; i python3"
 a idev="isoftwares; ilanguages"
+a invm="curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash"
+a inode="nvm install node"
+
+# /----- GIT -----/
+
+a g="git"
+a gp="g pull --all"
+a ga="g add"
+a gc="g clone"
+a gr="g reset"
+a gh="g -h"
 
 # /----- DOCKER -----/
 
@@ -79,8 +92,13 @@ a drun="d run"
 a dstop="d stop"
 a dexec="d exec -it"
 a dc="d compose"
-a dcup="dc up"
+a dcup="dc up -d"
+a dcdown="dc down -d"
 a dps="d ps"
+a drm="d rm"
+a dlogs="d logs"
+a dprune="d system prune"
+# a cleanContainers="dstop $(dps -q) && drm $(dps -q)"
 
 # /----- HYPRLAND -----/
 
@@ -102,8 +120,10 @@ a cduserconfigs="cdhypr && cd UserConfigs"
 a cduserscripts="cdhypr && cd UserScripts"
 a cdusercustomscripts="cduserscripts && cd CustomScripts"
 a ckeybinds="cduserconfigs && n UserKeybinds.conf"
+a cusersettings="cduserconfigs && n UserSettings.conf"
 
 # Conf Files Access
+a cuservars="cduserconfigs && n 01-UserDefaults.conf"
 a ckitty="cdkitty && n kitty.conf"
 a chypr="cdhypr && n hyprland.conf"
 
@@ -182,26 +202,83 @@ a caddy-format="cdcaddy; s caddy fmt --overwrite"
 a today='e $(date +%D)' #Today's date
 
 # /----- DEV -----/
-a dev='cd $HOME/dev'
 
-# Falloutdle
-a falloutdle='dev; cd falloutdle'
+DEV="$HOME/dev"
+PERSO="$DEV/perso"
+a dev='cd $PERSO'
+
+# falloutdle
+a falloutdle='cd $PERSO; cd falloutdle'
 a falloutdle-run='c; falloutdle; bash ./run.sh'
 a falloutdle-run-help='falloutdle-run -h'
 a frun='falloutdle-run'
 a frunh="falloutdle-run-help"
 
-#Mesh
-a mesh='dev; cd Mesh'
-a mesh-run='c; mesh; go run gui/main.go'
+# mesh
+a mesh='dev; cd mesh'
+a mesh-run='c; mesh; go run main.go'
 a mrun='mesh-run'
+
+# go of life
+a gol='dev; cd game-of-life'
+a grun='c; gol; go run main.go'
+
+# anime-sama downloader
+a asd='dev; cd anime-sama-downloader'
+a asdupdate='asd; npm install'
+a asdrun='asd; c; npm run start:cli'
+a asddownload='asd; c; npm run start:download'
+
+# llm-course
+a llm='dev; cd llm-from-scratch'
+a llm-run='llm; jupyter notebook'
 
 # /----- IUT -----/
 
-a cdiut='dev; cd iut'
+IUT="$DEV/iut/s5"
+a cdiut='cd $IUT'
 a cddiut="cdiut; cd docker-web-3a"
 
 # Docker
 a dciut="cddiut; dcup --pull always -d --wait"
 a dexeciut="dexec docker-web-3a-server-1 bash"
 a diut="dciut; dexeciut"
+
+# My Avatar
+a cdma="dev; cd iut/my-avatar"
+a dcma="cdma; dcup --pull always -d"
+
+# GameCritics
+a gamecritics="cdiut; cd projets/gamecritics"
+a gamecritics-run="gamecritics; dcup"
+
+# /----- FIREFLY III -----/
+
+a cdfirefly="cd ~/softwares/firefly-iii/"
+a firefly-run="cdfirefly; dcup --wait"
+a firefly-stop="cdfirefly; dcdown"
+
+# /----- RETRO-DEV -----/
+
+a retro="dev; cd retro-game"
+
+# /----- ASM6 SANDBOX -----/
+
+a mos6502="retro; cd mos-6502-sandbox"
+
+# /----- INIT -----/
+
+update () {
+ echo -e "\e[1;34mUpdate dev folder...\e[0m"
+ cd $1;
+ for project in $(ls); do
+  	if [ -d "$project" ]; then
+  	  echo -e "\e[1;34m> Update $project\e[0m";
+          cd $project
+          gp;
+	  cd ..
+	fi
+ done
+}
+
+a init="waybar-restart; u; autoremove; pmclean; home"
