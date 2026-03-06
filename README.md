@@ -1,4 +1,4 @@
-# Custom auto-installer for JaKoolit Fedora Hyprland
+# Custom setup for Hyprland on Fedora Linux
 
 ### Description
 
