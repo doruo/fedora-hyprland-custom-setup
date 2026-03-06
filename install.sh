@@ -27,7 +27,7 @@ DELAY_BEFORE_REBOOT=5
 
 # Path vars
 RELATIVE_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-CUSTOM_CONF_PATH="$RELATIVE_PATH/custom-hypr"
+CUSTOM_CONF_PATH="$RELATIVE_PATH/dots"
 CONF_PATH="$HOME/.config/hypr"
 
 # Config
